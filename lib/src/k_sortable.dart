@@ -57,14 +57,17 @@ enum KSortable {
   ///This generates the timestamp based on the kSortable. The optional [isWeb]
   ///is not necessary except in testing as the package can detect if it is
   ///running on the web.
-  BigInt generateTimestamp([bool? isWeb]) {
+  String generateTimestamp([bool? isWeb]) {
     isWeb ??= const bool.fromEnvironment('dart.library.js_util');
+    late BigInt timestamp;
 
     if (isWeb) {
-      return _timestampForWeb;
+      timestamp = _timestampForWeb;
+    } else {
+      timestamp = _timestampForNative;
     }
 
-    return _timestampForNative;
+    return timestamp.toString();
   }
 
   /// This calculates the length of the generated timestamp based on the number

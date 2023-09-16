@@ -8,7 +8,7 @@ void main() {
     for (final e in sortables) {
       if (e == KSortable.none) return;
 
-      final timestampLength = e.generateTimestamp(false).toString().length;
+      final timestampLength = e.generateTimestamp(false).length;
 
       //an extra digit was added to timestampLength to let it generate to more
       //than year 5000 AD.
@@ -22,7 +22,7 @@ void main() {
     for (final e in sortables) {
       if (e == KSortable.none) return;
 
-      final timestampLength = e.generateTimestamp(true).toString().length;
+      final timestampLength = e.generateTimestamp(true).length;
 
       //an extra digit was added to timestampLength to let it generate to more
       //than year 5000 AD.
