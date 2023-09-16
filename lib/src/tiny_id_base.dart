@@ -6,6 +6,20 @@ import 'k_sortable.dart';
 
 /// Like nanoid but k-sortable
 class TinyID {
+
+TinyID( {
+    /// These are the alphabets the ids would be generated from.
+    String customAlphabets = base64url,
+    this.kSortable = KSortable.millisecond,
+    this.minRandomCharacters = 3,
+    this.receiveCollisionWarnings = true,
+    this.bodyLength = 21,
+    this.suffix = '',
+    this.prefix = '',
+  }) : customAlphabets = customAlphabets.characters.toSet().toList().join() {
+    _validateLength();
+  }
+
   /// This string will appear at the beginning of every id that is generated.
   final String prefix;
 
@@ -15,37 +29,30 @@ class TinyID {
   /// This determines how sortable the generated ids should be.
   final KSortable kSortable;
 
- 
+  /// The length of the body of the generated id. It does not include the length
+  /// of the [prefix] or [suffix].
+  final int bodyLength;
 
-  /// The maximum length of the generated id. It would throw an error if it is
-  /// less than the length of [prefix] + the length of [suffix] +
-  /// [numberOfRandomCharacters]. It will also throw an error if it is
-  /// smaller than the result of [_test].
-  final int? maxLength;
+  /// This is the minimum number of random characters the id should have to
+  /// prevent collisions.
+  final int minRandomCharacters;
+
+  /// When this is true, generating an id that its body is not long enough to
+  /// hold the number of random characters in [minRandomCharacters] would throw
+  /// an error. When it is false, the body of the id would be trimmed so that it
+  /// would always have the [bodyLength] specified. 
+  final bool receiveCollisionWarnings;
 
   /// This string will appear at the end of every id that is generated.
   final String suffix;
 
-  TinyID({
-    this.numberOfRandomCharacters = 13,
-    this.maxLength,
-    this.suffix = '',
-    this.prefix = '',
+  
 
-    /// These are the alphabets the ids would be generated from.
-    String customAlphabets = base64url,
-    this.kSortable = KSortable.milliseconds,
-  }) : customAlphabets = customAlphabets.characters.toSet().toList().join() {
-    _validateMaxLength();
-  }
+   /// The number of random letters added to improve collision resistance.
+  // int get numberOfRandomCharacters = KSortable.;
 
-   /// The number of random letters to be added to improve collision resistance.
-   int get numberOfRandomCharacters = KSortable.;
-
-  void _validateMaxLength() {
-    final maxLengthIsNotNull = maxLength != null;
-    final maxLengthTooSmall =
-        maxLength! > prefix.length + suffix.length + numberOfRandomCharacters;
+  void _validateLength() {
+   
     if (maxLengthIsNotNull && maxLengthTooSmall) {
       throw maxLengthTooSmallError;
     }

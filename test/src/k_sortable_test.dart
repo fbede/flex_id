@@ -29,4 +29,10 @@ void main() {
       expect(e.timestampLength, timestampLength - 1);
     }
   });
+
+  test('Checks that the timestamps length is calculated properly', () {
+    const kSortable = KSortable.year;
+
+    expect(kSortable.calculateTimestampLength(64), 3);
+  });
 }

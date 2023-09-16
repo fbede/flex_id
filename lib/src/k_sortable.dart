@@ -10,38 +10,38 @@ enum KSortable {
   none(0),
 
   /// This generates timestamps as years since epoch.
-  years(4),
+  year(4),
 
   /// This generates timestamps as months since epoch.
-  months(5),
+  month(5),
 
   /// This generates timestamps as weeks since epoch.
-  weeks(6),
+  week(6),
 
   /// This generates timestamps as days since epoch.
-  days(7),
+  day(7),
 
   /// This generates timestamps as hours since epoch.
-  hours(8),
+  hour(8),
 
   /// This generates timestamps as minutes since epoch.
-  minutes(10),
+  minute(10),
 
   /// This generates timestamps as seconds since epoch.
-  seconds(11),
+  second(11),
 
   /// This generates timestamps as milliseconds since epoch.
-  milliseconds(14),
+  millisecond(14),
 
   /// This generates timestamps as microseconds since epoch. On web, it uses
   /// millisecondsSinceEpoch and adds randomly generated microsecond values.
-  microseconds(17),
+  microsecond(17),
 
   /// This generates timestamps as nanoseconds since epoch. Since it is not
   /// natively supported, the nanosecond values are randomly generated and added
   /// to millisecondsSinceEpoch on Web or microsecondsSinceEpoch on the other
   /// platforms.
-  nanoseconds(20),
+  nanosecond(20),
 
   /// This generates timestamps as picoseconds since epoch. Since it is not
   /// natively supported, the picosecond values are randomly generated and added
@@ -67,6 +67,14 @@ enum KSortable {
     return _timestampForNative;
   }
 
+  /// This calculates the length of the generated timestamp based on the number
+  /// of unique alphabets.
+  int calculateTimestampLength(int numberOfAlphabetCharacters) =>
+      (log(_maxTimestampValue.toDouble()) ~/ log(numberOfAlphabetCharacters)) +
+      1;
+
+  BigInt get _maxTimestampValue => BigInt.from(pow(10, timestampLength));
+
   BigInt get _timestampForNative {
     //Used to randomize values that a dart platform does not natively generate
     final random = Random.secure();
@@ -78,25 +86,25 @@ enum KSortable {
     switch (this) {
       case KSortable.none:
         throw unsupportedSortableCase;
-      case KSortable.years:
+      case KSortable.year:
         return value ~/ BigInt.from(31556952000000);
-      case KSortable.months:
+      case KSortable.month:
         return value ~/ BigInt.from(2629746000000);
-      case KSortable.weeks:
+      case KSortable.week:
         return value ~/ BigInt.from(604800000000);
-      case KSortable.days:
+      case KSortable.day:
         return value ~/ BigInt.from(86400000000);
-      case KSortable.hours:
+      case KSortable.hour:
         return value ~/ BigInt.from(3600000000);
-      case KSortable.minutes:
+      case KSortable.minute:
         return value ~/ BigInt.from(60000000);
-      case KSortable.seconds:
+      case KSortable.second:
         return value ~/ BigInt.from(1000000);
-      case KSortable.milliseconds:
+      case KSortable.millisecond:
         return value ~/ BigInt.from(1000);
-      case KSortable.microseconds:
+      case KSortable.microsecond:
         return value;
-      case KSortable.nanoseconds:
+      case KSortable.nanosecond:
         return (value * BigInt.from(1000)) + randomNanoseconds;
       case KSortable.picosecond:
         return (value * BigInt.from(1000000)) + randomPicoseconds;
@@ -115,25 +123,25 @@ enum KSortable {
     switch (this) {
       case KSortable.none:
         throw UnsupportedError('This case should never be called');
-      case KSortable.years:
+      case KSortable.year:
         return value ~/ BigInt.from(31556952000);
-      case KSortable.months:
+      case KSortable.month:
         return value ~/ BigInt.from(2629746000);
-      case KSortable.weeks:
+      case KSortable.week:
         return value ~/ BigInt.from(604800000);
-      case KSortable.days:
+      case KSortable.day:
         return value ~/ BigInt.from(86400000);
-      case KSortable.hours:
+      case KSortable.hour:
         return value ~/ BigInt.from(3600000);
-      case KSortable.minutes:
+      case KSortable.minute:
         return value ~/ BigInt.from(60000);
-      case KSortable.seconds:
+      case KSortable.second:
         return value ~/ BigInt.from(1000);
-      case KSortable.milliseconds:
+      case KSortable.millisecond:
         return value;
-      case KSortable.microseconds:
+      case KSortable.microsecond:
         return (value * BigInt.from(1000)) + randomMicroseconds;
-      case KSortable.nanoseconds:
+      case KSortable.nanosecond:
         return (value * BigInt.from(1000000)) + randomNanoseconds;
       case KSortable.picosecond:
         return (value * BigInt.from(1000000000)) + randomPicoseconds;

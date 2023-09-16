@@ -1,6 +1,5 @@
-import '../lib/tiny_id.dart';
+import 'package:tiny_id/src/k_sortable.dart';
 
 void main() {
-  var awesome = Awesome();
-  print('awesome: ${awesome.isAwesome}');
+  print(KSortable.day.name);
 }
