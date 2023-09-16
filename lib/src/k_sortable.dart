@@ -76,6 +76,7 @@ enum KSortable {
       (log(_maxTimestampValue.toDouble()) ~/ log(numberOfAlphabetCharacters)) +
       1;
 
+// FIX: Generates wrong value for none
   BigInt get _maxTimestampValue => BigInt.from(pow(10, timestampLength));
 
   BigInt get _timestampForNative {

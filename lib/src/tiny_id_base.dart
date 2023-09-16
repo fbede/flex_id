@@ -60,7 +60,30 @@ class TinyID {
       kSortable.calculateTimestampLength(customAlphabets.length);
 
   /// This generates the nextId according to the saved parameters
-  String get nextId => prefix + _sortableString + _randomString + suffix;
+  String get nextId {
+    if (kSortable == KSortable.none) {
+      return prefix + _sortableString + _randomString + suffix;
+    }
+    return prefix + _sortableString + _randomString + suffix;
+  }
+
+  /// This gives information about the likelihood of a collision based on the
+  /// instance parameters.
+  String get collisionInfo {
+    //FIX: Does not work as intended
+    final numOfIds =
+        sqrt(numberOfRandomCharacters * customAlphabets.length / 50).round();
+    final noSortableMessage =
+        'You need to generate $numOfIds ids to have a 1% chance of id collision';
+    final sortableMessage =
+        'You need to generate $numOfIds ids every ${kSortable.name} to have a 1% chance of id collision';
+
+    if (kSortable == KSortable.none) {
+      return noSortableMessage;
+    }
+
+    return sortableMessage;
+  }
 
   void _validateLength() {
     if (!receiveCollisionWarnings) return;
