@@ -1,31 +1,37 @@
-// ignore_for_file: use_string_buffers
-
 import 'dart:math';
 
 import 'package:b/b.dart';
 import 'package:characters/characters.dart';
 
+import 'alphabets.dart';
 import 'errors.dart';
 import 'k_sortable.dart';
+import 'precision.dart';
 
 /// Like nanoid but k-sortable
-class TinyID {
-  TinyID({
-    /// These are the alphabets the ids would be generated from.
-    String customAlphabets = base64url,
-    this.kSortable = KSortable.millisecond,
-    this.minNumberOfRandomCharacters = 3,
-    this.receiveCollisionWarnings = true,
-    this.bodyLength = 21,
-    this.suffix = '',
-    this.prefix = '',
-  }) : customAlphabets = customAlphabets.characters.toSet().toList().join() {
-    _validateAlphabets();
-    _validateLength();
+class FlexID {
+  FlexID({
+    this.precision = Precision.millisecond,
+    String? customAlphabets,
+    gb this.length = 15,
+  }) {
+    customAlphabets ??= Alphabets.base64url.characters;
+
+    final characters = customAlphabets.characters.toSet().toList()..sort();
+    customAlphabets = characters.join();
+
+    assert(
+      customAlphabets.length >= 2,
+      'customAlphabets must have at least 2 distinct characters',
+    );
+
+    if (receiveCollisionWarnings) {
+      assert(numberOfRandomCharacters >= minNumberOfRandomCharacters, '');
+    }
   }
 
   /// This string will appear at the beginning of every id that is generated.
-  final String prefix;
+  final Precision precision;
 
   /// These are the alphabets the ids would be generated from.
   final String customAlphabets;
@@ -35,7 +41,7 @@ class TinyID {
 
   /// The length of the body of the generated id. It does not include the length
   /// of the [prefix] or [suffix].
-  final int bodyLength;
+  final int length;
 
   /// This is the minimum number of random characters the id should have to
   /// prevent collisions.
@@ -44,7 +50,7 @@ class TinyID {
   /// When this is true, generating an id that its body is not long enough to
   /// hold the number of random characters in [minNumberOfRandomCharacters]
   /// would throw an error. When it is false, the body of the id would be
-  /// trimmed so that it would always have the [bodyLength] specified.
+  /// trimmed so that it would always have the [length] specified.
   final bool receiveCollisionWarnings;
 
   /// This string will appear at the end of every id that is generated.
@@ -53,7 +59,7 @@ class TinyID {
   /// The number of random letters added to improve collision resistance. When
   /// this value is positive, random characters were added to the ids body. When
   /// it is negative, some characters were trimmed out of the ids body.
-  int get numberOfRandomCharacters => bodyLength - numberOfSortableCharacters;
+  int get numberOfRandomCharacters => length - numberOfSortableCharacters;
 
   /// This is the number of lexicographically sortable characters.
   int get numberOfSortableCharacters =>
@@ -85,23 +91,6 @@ class TinyID {
     return sortableMessage;
   }
 
-  void _validateLength() {
-    if (!receiveCollisionWarnings) return;
-
-    final highChanceOfCollision =
-        numberOfRandomCharacters < minNumberOfRandomCharacters;
-
-    if (highChanceOfCollision) {
-      throw collisionError;
-    }
-  }
-
-  void _validateAlphabets() {
-    if (customAlphabets.length < 2) {
-      throw insufficientAlphabetError;
-    }
-  }
-
   String get _sortableString {
     final converter = BaseConversion(from: decimal, to: customAlphabets);
     String baseString = converter(kSortable.generateTimestamp());
@@ -115,7 +104,7 @@ class TinyID {
 
   String get _randomString {
     final random = Random.secure();
-    final lengthOfStringToGenerate = bodyLength - numberOfSortableCharacters;
+    final lengthOfStringToGenerate = length - numberOfSortableCharacters;
     final alphabets = customAlphabets.characters.toList();
 
     String randomString = '';
