@@ -52,29 +52,29 @@ enum Alphabets {
   final String characters;
 
   /// Same as [binary] numeral system
-  Alphabets get base2 => Alphabets.binary;
+  static Alphabets base2 = binary;
 
   /// Same as [ternary] numeral system
-  Alphabets get base3 => ternary;
+  static Alphabets base3 = ternary;
 
   /// Same as [quaternary] numeral system
-  Alphabets get base4 => quaternary;
+  static Alphabets base4 = quaternary;
 
   /// Same as [quinary] numeral system
-  Alphabets get base5 => quinary;
+  static Alphabets base5 = quinary;
 
   /// Same as [senary] numeral system
-  Alphabets get base6 => senary;
+  static Alphabets base6 = senary;
 
   /// Same as [octal] numeral system
-  Alphabets get base8 => octal;
+  static Alphabets base8 = octal;
 
   /// Same as [decimal] numeral system
-  Alphabets get base10 => decimal;
+  static Alphabets base10 = decimal;
 
   /// Same as [duodecimal] numeral system
-  Alphabets get base12 => duodecimal;
+  static Alphabets base12 = duodecimal;
 
   /// Same as [hexadecimal] numeral system
-  Alphabets get base16 => hexadecimal;
+  static Alphabets base16 = hexadecimal;
 }

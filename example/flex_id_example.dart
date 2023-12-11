@@ -1,8 +1,7 @@
-import 'package:tiny_id/src/k_sortable.dart';
-import 'package:tiny_id/tiny_id.dart';
+import 'package:flex_id/flex_id.dart';
 
 void main() {
-  final pkGenerator = TinyID(kSortable: KSortable.none, bodyLength: 21);
+  final pkGenerator = FlexID(minRandomCharacters: 2);
 
   print(pkGenerator.numberOfRandomCharacters);
 
